@@ -1,0 +1,84 @@
+#Hello, world!
+#This code is for me, and you
+#These are the most advanced methods of analysis I have encountered in big-data, banking analytics
+#I will code in SAS and Python
+
+#Topics
+#read/transpose/sort
+#merge 
+#sql
+#deduplication
+#arrays and loops
+#retain / lag / x+1
+#freq (_all_,list,chisq,ODS)
+#rank (macro,ks,woe,iv)
+#corr
+#model glm/reg/gradboost/xgboost
+#date/time mdy calcs
+#num/var formatting
+#graph ROC/AUC
+
+
+import numpy as np
+import pandas as pd
+import polars as pl
+
+#dl sample data file from Kaggle
+#start
+
+import os
+
+for dirname, _, filenames in os.walk('/kaggle/input'):
+    for filename in filenames:
+        print(os.path.join(dirname, filename))
+
+import kagglehub
+path = kagglehub.dataset_download("ruchi798/data-science-job-salaries")
+print("Path to dataset files:", path)
+
+#end
+
+
+#start analysis
+
+df = pd.read_csv('/kaggle/input/data-science-job-salaries/ds_salaries.csv')
+df.info()
+print(df.head())
+df.head()
+
+#proc sort data = df; by id nodup; quit;
+df.sort()
+df_sort_dupe = (df.sort(df.columns).unique())
+df_deduped = df.unique(subset=["id"], keep="none")
+
+# Sort by all columns and remove fully duplicate rows
+df_sorted_deduped = (df.sort(df.columns).unique())
+
+print(df_sorted_deduped)
+
+left_df = pd.DataFrame({
+    'id': [1, 2, 3, 4],
+    'left_val': ['A', 'B', 'C', 'D']
+})
+
+right_df = pd.DataFrame({
+    'id': [2, 4, 5],
+    'right_val': ['W', 'X', 'Y']
+})
+
+#pandas left join
+join_df = pd.merge(left_df, right_df, on='id', how='left')
+print(result_df)
+
+#polars left join
+join_pol = left_df.join(right_df, on="id", how="left")
+
+#incl. a where statement
+final_final = join_pol.filter(pl.col("score") > 80)
+
+print(final_final)
+
+
+
+
+
